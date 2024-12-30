@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Consommation</title>
+            <style>
+                /* Styles généraux */
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #3a3a3a;
+                    color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                    line-height: 1.6;
+                }
+                header {
+                    background-color: #005012;
+                    color: white;
+                    padding: 1.5rem;
+                    text-align: center;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                }
+                header h1 {
+                    margin: 0;
+                    font-size: 2rem;
+                    font-weight: bold;
+                }
+                main {
+                    padding: 2rem;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .links {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                .links a {
+                    color: #ffffff;
+                    background-color: #303030;
+                    padding: 0.8rem 1.2rem;
+                    border: 1px solid #ffffff;
+                    border-radius: 1px;
+                    text-decoration: none;
+                    font-size: 1rem;
+                    transition: background-color 0.3s, color 0.3s;
+                }
+                .links a:hover {
+                    background-color: #005012;
+                    color: white;
+                }
+                #back-home {
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    padding: 1rem;
+                }
+                footer {
+                    background-color: #f7f7f7;
+                    color: #ffffff;
+                    text-align: center;
+                    padding: 1rem;
+                    margin-top: 2rem;
+                    font-size: 0.9rem;
+                }
+
+                /* les styles suivants sont spécifiques aux graphiques */
+                canvas {
+                    max-width: 100%;
+                    height: auto;
+                    margin: 2rem 0;
+                    background-color: #2e2e2e;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+                }
+
+                /* On anime les graphiques, ça rend bien */
+                .chart-container {
+                    position: relative;
+                    width: 90%;
+                    max-width: 900px;
+                    margin: 0 auto;
+                    padding: 1rem;
+                    background-color: #303030;
+                    border-radius: 12px;
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+                }
+
+                .chart-container canvas {
+                    border-radius: 10px;
+                }
+                a {
+                    color: #76c7ff;
+                    text-decoration: none;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    padding: 1rem;  
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <header>
+                <h1>Consommation du logement</h1>
+            </header>
+            <main>
+                <label for="timeScale">Choisissez l'échelle de temps :</label>
+                <select id="timeScale" onchange="updateChart()">
+                    <option value="monthly">Mensuelle</option>
+                    <option value="weekly">Hebdomadaire</option>
+                    <option value="daily">Quotidienne</option>
+                </select>
+        
+                <div class="graph-container">
+                    <h3>Consommation en électricité</h3>
+                    <canvas id="electricityChart"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h3>Consommation en eau</h3>
+                    <canvas id="waterChart"></canvas>
+                </div>
+                <div class="graph-container">
+                    <h3>Consommation en déchets</h3>
+                    <canvas id="wasteChart"></canvas>
+                </div>
+                <a href="/">Retour à l'accueil</a>
+            </main>
+
+            <!-- On insère les données ici -->
+            <!-- DATA_PLACEHOLDER -->
+             
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                let electricityChart, waterChart, wasteChart;
+                
+                // Fonction afin de mettre à jour les graphiques lorsque l'on change d'échelle de temps
+                function updateChart() {
+                    const timeScale = document.getElementById('timeScale').value;
+                    const data = dataSets[timeScale];
+        
+                    if (!data) {
+                        console.error("Error : No data available for :", timeScale);
+                        return;
+                    }
+        
+                    const labels = data.labels;
+                    const electricityData = data.electricity;
+                    const waterData = data.water;
+                    const wasteData = data.waste;
+                    
+                    // On supprime les anciens graphiques
+                    if (electricityChart) electricityChart.destroy();
+                    if (waterChart) waterChart.destroy();
+                    if (wasteChart) wasteChart.destroy();
+                    
+                    // Et on crée les nouveaux graphiques avec les bonnes options (très verbeux mais les graphiques rendent bien :D)
+                    const ctx1 = document.getElementById('electricityChart').getContext('2d');
+                    electricityChart = new Chart(ctx1, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Électricité (kWh)',
+                                data: electricityData,
+                                borderColor: 'yellow',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: { legend: { display: true, labels: { color: '#FFFFFF' } } },
+                            scales: {
+                                x: { 
+                                    title: { 
+                                        display: true, 
+                                        text: 'Période', 
+                                        color: '#FFFFFF'
+                                    },
+                                    ticks: {
+                                        color: '#FFFFFF'
+                                    }
+                                },
+                                y: { 
+                                    title: { 
+                                        display: true, 
+                                        text: 'Consommation (kWh)', 
+                                        color: '#FFFFFF'
+                                    },
+                                    ticks: {
+                                        color: '#FFFFFF'
+                                    }
+                                }
+                            }
+                        }
+                    });
+        
+                    const ctx2 = document.getElementById('waterChart').getContext('2d');
+                    waterChart = new Chart(ctx2, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Eau (m³)',
+                                data: waterData,
+                                borderColor: 'blue',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: { legend: { display: true, labels: { color: '#FFFFFF' } } },
+                            scales: {
+                                x: { 
+                                    title: { 
+                                        display: true, 
+                                        text: 'Période', 
+                                        color: '#FFFFFF'
+                                    },
+                                    ticks: {
+                                        color: '#FFFFFF'
+                                    }
+                                },
+                                y: { 
+                                    title: { 
+                                        display: true, 
+                                        text: 'Consommation (m³)', 
+                                        color: '#FFFFFF'
+                                    },
+                                    ticks: {
+                                        color: '#FFFFFF'
+                                    }
+                                }
+                            }
+                        }
+                    });
+        
+                    const ctx3 = document.getElementById('wasteChart').getContext('2d');
+                    wasteChart = new Chart(ctx3, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Déchets (kg)',
+                                data: wasteData,
+                                borderColor: 'black',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: { legend: { display: true, labels: { color: '#FFFFFF' } } },
+                            scales: {
+                                x: { 
+                                    title: { 
+                                        display: true, 
+                                        text: 'Période', 
+                                        color: '#FFFFFF'
+                                    },
+                                    ticks: {
+                                        color: '#FFFFFF'
+                                    }
+                                },
+                                y: { 
+                                    title: { 
+                                        display: true, 
+                                        text: 'Poids des déchets (kg)', 
+                                        color: '#FFFFFF'
+                                    },
+                                    ticks: {
+                                        color: '#FFFFFF'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                // Une fois que la page HTML a été entièrement chargée, on peut update les graphiques
+                document.addEventListener('DOMContentLoaded', updateChart);
+            </script>
+        </body>
+        </html>

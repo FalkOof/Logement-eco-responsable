@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Économies réalisées</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <style>
+                /* Styles généraux */
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background-color: #3a3a3a;
+                    color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                    line-height: 1.6;
+                }
+                header {
+                    background-color: #005012;
+                    color: white;
+                    padding: 1.5rem;
+                    text-align: center;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                }
+                header h1 {
+                    margin: 0;
+                    font-size: 2rem;
+                    font-weight: bold;
+                }
+                main {
+                    padding: 2rem;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .links {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                .links a {
+                    color: #ffffff;
+                    background-color: #303030;
+                    padding: 0.8rem 1.2rem;
+                    border: 1px solid #ffffff;
+                    border-radius: 1px;
+                    text-decoration: none;
+                    font-size: 1rem;
+                    transition: background-color 0.3s, color 0.3s;
+                }
+                .links a:hover {
+                    background-color: #005012;
+                    color: white;
+                }
+                #back-home {
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    padding: 1rem;
+                }
+                footer {
+                    background-color: #f7f7f7;
+                    color: #ffffff;
+                    text-align: center;
+                    padding: 1rem;
+                    margin-top: 2rem;
+                    font-size: 0.9rem;
+                }
+                /* Styles spécifiques aux graphiques */
+                canvas {
+                    max-width: 100%;
+                    height: auto;
+                    margin: 2rem 0;
+                    background-color: #2e2e2e;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+                }
+                /* Animation et amélioration du rendu visuel des graphiques */
+                .chart-container {
+                    position: relative;
+                    width: 90%;
+                    max-width: 900px;
+                    margin: 0 auto;
+                    padding: 1rem;
+                    background-color: #303030;
+                    border-radius: 12px;
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+                }
+                .chart-container canvas {
+                    border-radius: 10px;
+                }
+                a {
+                    color: #76c7ff;
+                    text-decoration: none;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    padding: 1rem;  
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+
+            </style>
+        </head>
+        <body>
+            <header>
+                <h1>Économies réalisées</h1>
+            </header>
+            <main>
+                <!-- Pas encore de back-end, juste des données random-->
+                <canvas id="savingsChart" width="400" height="200"></canvas>
+                <script>
+                    const ctx = document.getElementById('savingsChart').getContext('2d');
+                    const savingsChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                            datasets: [
+                                { 
+                                    label: 'Économies (€)', 
+                                    data: [20, 25, 30, 35, 30], 
+                                    backgroundColor: 'yellow' 
+                                }
+                            ]
+                        },
+                        options: { 
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: 'white'
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: 'white'
+                                    },
+                                    title: {
+                                        color: 'white'
+                                    }
+                                },
+                                y: {
+                                    ticks: {
+                                        color: 'white'
+                                    },
+                                    title: {
+                                        color: 'white'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script>
+                <a href="/">Retour à l'accueil</a>
+            </main>
+        </body>
+        </html>

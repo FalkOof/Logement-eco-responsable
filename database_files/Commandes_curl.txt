@@ -1,0 +1,27 @@
+Liste des commandes curl disponibles sur le serveur à l'état actuel :
+
+GET : 
+curl -X GET "http://localhost:8888/x
+
+x peut valoir : 
+-logements (afficher la liste des logements)
+-factures (affiche la liste des factures)
+-mesures (affiche la liste des mesures des capteurs)
+-factures/chart (affiche un graphique des différents types de factures, il suffit de marquer http://localhost:8888/factures/chart dans un navigateur)
+-meteo (affiche dans la tableau les prévisions météo des 5 prochains jours à Paris, il suffit de marquer http://localhost:8888/meteo dans un navigateur)
+-adresses (affiche la liste des adresses)
+-pieces (affiche la liste des pièces)
+-capteurs (affiche la liste des capteurs)
+-types (affiche la liste des types des capteurs)
+
+
+
+POST :
+curl -X POST http://localhost:8888/x
+
+x change de la valeur en fonction de la façon des champs des tables de la base de données à modifier.
+
+Un exemple serait la commande suivant, qui permet de rajouter un logement :
+
+curl -X POST http://localhost:8888/logement \
+-d "IdAdresse=1&Telephone=0123456789&Adresse_IP=192.168.1.1"
